@@ -1,0 +1,123 @@
+function Loginfoservicios
+    {
+    Write-Host "¿Desea guardar el log de servicios en el escritorio(E), en la raíz del disco C(C) o introducir una ruta personalizada(P)?"
+    $Prutas=Read-Host
+    if($Prutas -match "E")
+        {
+        $logservicios=Get-WmiObject -Class Win32_service | select *
+        $logservicios | Out-File -FilePath "C:\Users\javic\Desktop\$(get-date -f yyyy-MM-dd)Loginfoservicios.txt"
+        }
+    elseif($Prutas -match "C")
+        {
+        $logservicios=Get-WmiObject -Class Win32_service | select *
+        $logservicios | Out-File -FilePath "C:\Users\javic\Documents\$(get-date -f yyyy-MM-dd)Loginfoservicios.txt"
+        }
+    elseif($Prutas -match "P")
+        {
+        Write-Host "Indique la ruta completa incluyendo nombre de archivo y extensión"
+        [string]$ruta=Read-Host
+        $logservicios=Get-WmiObject -Class Win32_service | select *
+        $logservicios | Out-File -FilePath $ruta
+        }
+    else
+        {
+        "No ha marcado ninguna de las opciones indicadas"
+        }
+     }
+
+
+function Loginfoprocesos
+    {
+    Write-Host "¿Desea guardar el log de procesos en el escritorio(E), en la raíz del disco C(C) o introducir una ruta personalizada(P)?"
+    $Prutasp=Read-Host
+    if($Prutasp -match "E")
+        {
+        $logserviciosp=Get-Proccess | select *
+        $logserviciosp | Out-File -FilePath "C:\Users\javic\Desktop\$(get-date -f yyyy-MM-dd)Loginfoservicios.txt"
+        }
+    elseif($Prutasp -match "C")
+        {
+        $logserviciosp=Get-Proccess | select *
+        $logserviciosp | Out-File -FilePath "C:\Users\javic\Documents\$(get-date -f yyyy-MM-dd)Loginfoservicios.txt"
+        }
+    elseif($Prutasp -match "P")
+        {
+        Write-Host "Indique la ruta completa incluyendo nombre de archivo y extensión"
+        [string]$rutap=Read-Host
+        $logserviciosp=Get-Proccess | select *
+        $logserviciosp | Out-File -FilePath $rutap
+        }
+    else
+        {
+        "No ha marcado ninguna de las opciones indicadas"
+        }
+     }
+
+
+function consumocpu
+    {
+    foreach($_ in Get-Process | Sort cpu -Descending)
+        {
+        if($_.cpu -gt100)
+            {
+            Write-host $_.name "está realizando un alto consumo de CPU"
+            }
+        else
+            {
+            Write-host $_.name "no consume más CPU de lo normal"
+            }
+        }
+    }
+
+function loginp
+    {
+    $uno=1
+    while($uno -eq "1")
+        {
+        $logserviciosp1= Get-Process | select *
+        $logserviciosp1 | Out-File -FilePath "C:\Users\javic\Desktop\$(get-date -f yyyy-MM-dd)Loginfoprocesos.txt"
+        Start-Sleep -Seconds 3600
+        }
+    }
+
+function logins
+    {
+    $unos=1
+    while($unos -eq "1")
+        {
+        $logserviciosp2=Get-WmiObject -Class Win32_service | select *
+        $logserviciosp2 | Out-File -FilePath "C:\Users\javic\Desktop\$(get-date -f yyyy-MM-dd)Loginfoservicios.txt"
+        Start-Sleep -Seconds 3600
+        }
+    }
+
+
+
+
+
+Write-Host "Selecciona una opción de monitorización del sistema: Información procesos alto consumo CPU(C), Generar log Información general de procesos(P), Generar log Información General de Servicios(S), Log ininterrumpido información de procesos(1), Log ininterrumpido de información de servicios(2)"
+$PreguntaPpal=Read-Host
+if($PreguntaPpal -match "P")
+    {
+    Loginfoprocesos
+    }
+elseif($PreguntaPpal -match "S")
+    {
+    Loginfoservicios
+    }
+elseif($PreguntaPpal -match "C")
+    {
+    consumocpu
+    }
+elseif($PreguntaPpal -match "1")
+    {
+    loginp
+    }
+elseif($PreguntaPpal -match "2")
+    {
+    logins
+    }
+else
+    {
+    Write-Host "No ha elegido ninguna de las opciones disponibles"
+    }
